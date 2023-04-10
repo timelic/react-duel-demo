@@ -1,0 +1,142 @@
+:root {
+  --perspective: 1500px;
+  --scale: 1.35;
+  --board-rotate-z: 30deg;
+  --block-width: calc(80px * var(--scale));
+  --block-height: calc(80px * var(--scale));
+  --block-column-gap: calc(10px * var(--scale));
+  --block-row-gap: calc(10px * var(--scale));
+  --card-w-l-ratio: calc(5.9 / 8.6);
+  --deck-offset-x: calc(90px * var(--scale));
+  --deck-offset-y: calc(45px * var(--scale));
+  --deck-rotate-z: 30deg;
+}
+#camera {
+  perspective: var(--perspective);
+  transform-style: preserve-3d;
+}
+#board {
+  perspective-origin: center center;
+  transform: translateX(0) translateY(0) translateZ(150px)
+    rotateX(var(--board-rotate-z));
+  transform-style: preserve-3d;
+  position: relative;
+}
+.card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: 0.3s;
+  aspect-ratio: var(--card-w-l-ratio);
+  background-color: skyblue;
+  background: url("../assets//26077387.jpg");
+  background-size: cover;
+  height: var(--block-height);
+  --x-margin-left: calc(
+    var(--c) * calc(var(--block-width) + var(--block-column-gap))
+  );
+  --x-padding: calc(
+    (var(--block-width) - var(--block-height) * var(--card-w-l-ratio)) / 2
+  );
+  --x: calc(var(--x-margin-left) + var(--x-padding));
+  --y: calc(var(--r) * calc(var(--block-height) + var(--block-row-gap)));
+  transform: translateX(var(--x)) translateY(var(--y)) translateZ(0);
+  transform-style: preserve-3d;
+}
+
+.card-defense {
+  --height: var(--block-width);
+  height: calc(var(--height));
+  --x-margin-left: calc(
+    var(--c) * calc(var(--block-width) + var(--block-column-gap))
+  );
+  --x-padding: calc(
+    (var(--block-width) - var(--height) * var(--card-w-l-ratio)) / 2
+  );
+  --y-margin-top: calc(
+    var(--r) * calc(var(--block-height) + var(--block-row-gap))
+  );
+  --y-padding: calc((var(--block-height) - var(--height)) / 2);
+  --x: calc(var(--x-margin-left) + var(--x-padding));
+  --y: calc(var(--y-margin-top) + var(--y-padding));
+  transform: translateX(var(--x)) translateY(var(--y)) translateZ(0)
+    rotateZ(90deg);
+}
+
+.card::after {
+  display: none;
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: grey;
+  transform: translateZ(calc(-1px * var(--z)));
+}
+
+.block {
+  width: var(--block-width);
+  height: var(--block-height);
+  background-color: #333;
+  cursor: pointer;
+}
+
+.block-extra {
+  margin-left: calc(var(--block-width) + var(--block-column-gap));
+}
+
+.block-row {
+  display: flex;
+  gap: var(--block-column-gap);
+}
+
+#board-bg {
+  display: flex;
+  flex-direction: column;
+  gap: var(--block-row-gap);
+  transform-style: preserve-3d;
+}
+
+.deck {
+  aspect-ratio: var(--card-w-l-ratio);
+  height: var(--block-height);
+  background-color: skyblue;
+  position: absolute;
+  bottom: 0;
+  transform-style: preserve-3d;
+  transform: translateX(calc(var(--deck-offset-x) * -1))
+    translateY(var(--deck-offset-y)) rotateZ(var(--deck-rotate-z));
+}
+
+.deck-main {
+  right: 0;
+  transform: translateX(calc(var(--deck-offset-x)))
+    translateY(var(--deck-offset-y)) rotateZ(calc(var(--deck-rotate-z) * -1));
+}
+
+.deck-opponent {
+  top: 0;
+  right: 0;
+  transform: translateX(calc(var(--deck-offset-x)))
+    translateY(calc(var(--deck-offset-y) * -1))
+    rotateZ(calc(var(--deck-rotate-z)));
+}
+
+.deck-main.deck-opponent {
+  right: auto;
+  transform: translateX(calc(var(--deck-offset-x) * -1))
+    translateY(calc(var(--deck-offset-y) * -1))
+    rotateZ(calc(var(--deck-rotate-z) * -1));
+}
+
+.card-deck {
+  width: 100%;
+  height: 100%;
+  background-color: darkorange;
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translateZ(calc(var(--i) * 0.5px));
+  border: 1px solid dimgray;
+  background: url("../assets//cover.jpeg");
+  background-size: cover;
+}
