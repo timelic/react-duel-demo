@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type CSSProperties, useState } from "react";
 import classnames from "classnames";
 import "./index.css";
 
@@ -53,27 +53,87 @@ const BoardBg: React.FC = () => (
 const Card: React.FC<{
   r?: number;
   c?: number;
-  z?: number;
+  h?: number;
   defense?: boolean;
-}> = ({ r = 0, c = 0, z = 0, defense = false }) => {
+  opponent?: boolean;
+  fly?: boolean;
+  transTime?: number;
+  style?: CSSProperties;
+}> = ({
+  r = 0,
+  c = 0,
+  h = 1,
+  defense = false,
+  opponent = false,
+  fly = false,
+  transTime = 0.3,
+  style = {},
+}) => {
   return (
     <div
-      className={classnames("card", { "card-defense": defense })}
-      // @ts-ignore
-      style={{ "--z": z, "--r": r, "--c": c }}
+      className={classnames("card", {
+        "card-defense": defense,
+        fly: fly,
+      })}
+      style={
+        {
+          "--h": h,
+          "--r": r,
+          "--c": c,
+          "--shadow": h ? 1 : 0,
+          "--opponent-deg": opponent ? "180deg" : "0deg",
+          "--trans-time": `${transTime}s`,
+          ...style,
+        } as CSSProperties
+      }
     ></div>
   );
 };
 
-export const Board: React.FC = () => (
-  <div id="camera">
-    <div id="board">
-      <BoardBg />
-      <Card r={1} c={1} />
-      <Card r={2} c={3} />
-      <Card r={3} c={2} />
-      <Card r={4} c={0} defense />
-      <Card r={4} c={4} />
-    </div>
-  </div>
-);
+export const Board: React.FC = () => {
+  const [r1, setR1] = useState(0);
+  const [c1, setC1] = useState(0);
+  const [fly, setFly] = useState(false);
+  const [transTime, setTransTime] = useState(0.3);
+  const [opponent, setOpponent] = useState(true);
+  function handleClick1() {
+    // 先r1+=1 满了再c1+=1
+    if (c1 < 4) {
+      setC1(c1 + 1);
+      setFly(true);
+      setTimeout(() => setFly(false), 300);
+    } else {
+      setC1(0);
+      setR1(r1 + 1);
+      setFly(true);
+      setTimeout(() => setFly(false), 300);
+      setOpponent(!opponent);
+    }
+  }
+  return (
+    <>
+      <div id="controller">
+        <button onClick={handleClick1}>A1</button>
+        <button>A2</button>
+      </div>
+      <div id="camera">
+        <div id="board">
+          <BoardBg />
+          <Card
+            r={r1}
+            c={c1}
+            fly={fly}
+            transTime={transTime}
+            opponent={opponent}
+            style={{ zIndex: 99 }}
+          />
+          <Card r={0} c={4} opponent />
+          <Card r={2} c={3} h={90} />
+          <Card r={4} c={0} />
+          <Card r={3} c={2} defense />
+          <Card r={4} c={4} />
+        </div>
+      </div>
+    </>
+  );
+};
