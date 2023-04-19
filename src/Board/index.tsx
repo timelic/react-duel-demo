@@ -94,6 +94,7 @@ export const Board: React.FC = () => {
   const [r1, setR1] = useState(0);
   const [c1, setC1] = useState(0);
   const [fly, setFly] = useState(false);
+  const [defense, setDefense] = useState(false);
   const [transTime, setTransTime] = useState(0.3);
   const [opponent, setOpponent] = useState(true);
   function handleClick1() {
@@ -110,11 +111,14 @@ export const Board: React.FC = () => {
       setOpponent(!opponent);
     }
   }
+  const handleClick2 = () => {
+    setDefense(defense => !defense);
+  };
   return (
     <>
       <div id="controller">
         <button onClick={handleClick1}>A1</button>
-        <button>A2</button>
+        <button onClick={handleClick2}>A2</button>
       </div>
       <div id="camera">
         <div id="board">
@@ -123,6 +127,7 @@ export const Board: React.FC = () => {
             r={r1}
             c={c1}
             fly={fly}
+            defense={defense}
             transTime={transTime}
             opponent={opponent}
             style={{ zIndex: 99 }}
