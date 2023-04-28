@@ -111,8 +111,8 @@ export const Board: React.FC = () => {
   return (
     <>
       <div id="controller">
-        <button onClick={store.move}>A1</button>
-        <button onClick={() => {}}>A2</button>
+        <button onClick={() => store.move()}>A1</button>
+        <button onClick={() => store.move(true)}>A2</button>
       </div>
       <div id="camera">
         <div id="board">
