@@ -117,9 +117,9 @@ export const Board: React.FC = () => {
       <div id="camera">
         <div id="board">
           <BoardBg />
-          {cards.map((card, idx) => (
+          {cards.map((card) => (
             <Card
-              key={idx}
+              key={card.inner.code}
               r={card.inner.zone}
               c={card.sequence}
               defense={card.inner.defense}

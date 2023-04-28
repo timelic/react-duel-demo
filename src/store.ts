@@ -19,12 +19,12 @@ interface MatState {
 export const store = proxy<MatState>({
   monsters: [
     { code: 10000, zone: MONSTER_ZONE, defense: false },
-    { code: 10000, zone: MONSTER_ZONE, defense: false },
+    { code: 10001, zone: MONSTER_ZONE, defense: false },
   ],
   magics: [
-    { code: 10000, zone: MAGIC_ZONE, defense: false },
-    { code: 10000, zone: MAGIC_ZONE, defense: false },
-    { code: 10000, zone: MAGIC_ZONE, defense: false },
+    { code: 10002, zone: MAGIC_ZONE, defense: false },
+    { code: 10003, zone: MAGIC_ZONE, defense: false },
+    { code: 10004, zone: MAGIC_ZONE, defense: false },
   ],
   move(reverse?: boolean) {
     if (reverse) {
