@@ -98,24 +98,41 @@ const Card: React.FC<{
 export const Board: React.FC = () => {
   const snap = useSnapshot(store);
 
-  const cards = snap.magics.concat(snap.monsters);
+  const cards = snap.magics
+    .map((card, sequence) => {
+      return { inner: card, sequence };
+    })
+    .concat(
+      snap.monsters.map((card, sequence) => {
+        return { inner: card, sequence };
+      })
+    );
 
   return (
     <>
       <div id="controller">
-        <button onClick={() => {}}>A1</button>
+        <button
+          onClick={() => {
+            const moved = store.monsters.pop();
+            if (moved) {
+              moved.transform.zone = 4;
+              store.magics.push(moved);
+            }
+          }}
+        >
+          A1
+        </button>
         <button onClick={() => {}}>A2</button>
       </div>
       <div id="camera">
         <div id="board">
           <BoardBg />
-          {cards.map((card) => (
+          {cards.map((card, idx) => (
             <Card
-              key={card.code}
-              r={card.transform.r}
-              c={card.transform.c}
-              h={card.transform.h}
-              defense={card.defense}
+              key={idx}
+              r={card.inner.transform.zone}
+              c={card.sequence}
+              defense={card.inner.defense}
             />
           ))}
         </div>
