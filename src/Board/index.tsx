@@ -1,13 +1,18 @@
-import React, { type CSSProperties, useState } from "react";
-import classnames from "classnames";
 import "./index.css";
+
+import classnames from "classnames";
+import React, { type CSSProperties } from "react";
+import { useSnapshot } from "valtio";
+
+import { store } from "../store";
 
 const BoardBgRow: React.FC<{ isExtra?: boolean }> = ({ isExtra = false }) => (
   <div className="block-row">
     {Array(isExtra ? 2 : 5)
       .fill(null)
-      .map((_) => (
+      .map((_, idx) => (
         <div
+          key={idx}
           className={classnames("block", {
             "block-extra": isExtra,
           })}
@@ -30,8 +35,8 @@ const BoardDeck: React.FC<{
     {Array(nCards)
       .fill(null)
       .map((_, i) => (
-        // @ts-ignore
-        <div className="card-deck" style={{ "--i": i }}></div>
+        // @ts-expect-error xxxxx
+        <div key={i} className="card-deck" style={{ "--i": i }}></div>
       ))}
   </div>
 );
@@ -73,70 +78,46 @@ const Card: React.FC<{
     <div
       className={classnames("card", {
         "card-defense": defense,
-        fly: fly,
+        fly,
       })}
       style={
         {
           "--h": h,
           "--r": r,
           "--c": c,
-          "--shadow": h ? 1 : 0,
+          "--shadow": h > 0 ? 1 : 0,
           "--opponent-deg": opponent ? "180deg" : "0deg",
           "--trans-time": `${transTime}s`,
           ...style,
-        } as CSSProperties
+        } as any
       }
     ></div>
   );
 };
 
 export const Board: React.FC = () => {
-  const [r1, setR1] = useState(0);
-  const [c1, setC1] = useState(0);
-  const [fly, setFly] = useState(false);
-  const [defense, setDefense] = useState(false);
-  const [transTime, setTransTime] = useState(0.3);
-  const [opponent, setOpponent] = useState(true);
-  function handleClick1() {
-    // 先r1+=1 满了再c1+=1
-    if (c1 < 4) {
-      setC1(c1 + 1);
-      setFly(true);
-      setTimeout(() => setFly(false), 300);
-    } else {
-      setC1(0);
-      setR1(r1 + 1);
-      setFly(true);
-      setTimeout(() => setFly(false), 300);
-      setOpponent(!opponent);
-    }
-  }
-  const handleClick2 = () => {
-    setDefense(defense => !defense);
-  };
+  const snap = useSnapshot(store);
+
+  const cards = snap.magics.concat(snap.monsters);
+
   return (
     <>
       <div id="controller">
-        <button onClick={handleClick1}>A1</button>
-        <button onClick={handleClick2}>A2</button>
+        <button onClick={() => {}}>A1</button>
+        <button onClick={() => {}}>A2</button>
       </div>
       <div id="camera">
         <div id="board">
           <BoardBg />
-          <Card
-            r={r1}
-            c={c1}
-            fly={fly}
-            defense={defense}
-            transTime={transTime}
-            opponent={opponent}
-            style={{ zIndex: 99 }}
-          />
-          <Card r={0} c={4} opponent />
-          <Card r={2} c={3} h={90} />
-          <Card r={4} c={0} />
-          <Card r={3} c={2} defense />
-          <Card r={4} c={4} />
+          {cards.map((card) => (
+            <Card
+              key={card.code}
+              r={card.transform.r}
+              c={card.transform.c}
+              h={card.transform.h}
+              defense={card.defense}
+            />
+          ))}
         </div>
       </div>
     </>
