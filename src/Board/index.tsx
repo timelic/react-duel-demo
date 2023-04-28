@@ -108,6 +108,8 @@ export const Board: React.FC = () => {
       })
     );
 
+  cards.sort((a, b) => a.inner.id - b.inner.id);
+
   return (
     <>
       <div id="controller">
@@ -119,7 +121,7 @@ export const Board: React.FC = () => {
           <BoardBg />
           {cards.map((card) => (
             <Card
-              key={card.inner.code}
+              key={card.inner.id}
               r={card.inner.zone}
               c={card.sequence}
               defense={card.inner.defense}

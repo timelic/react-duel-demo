@@ -5,7 +5,7 @@ const MONSTER_ZONE = 3;
 const MAGIC_ZONE = 4;
 
 interface CardState {
-  code: number;
+  id: number; // 每张卡在场上的唯一标识
   zone: number;
   defense: boolean;
 }
@@ -18,13 +18,13 @@ interface MatState {
 
 export const store = proxy<MatState>({
   monsters: [
-    { code: 10000, zone: MONSTER_ZONE, defense: false },
-    { code: 10001, zone: MONSTER_ZONE, defense: false },
+    { id: 0, zone: MONSTER_ZONE, defense: false },
+    { id: 1, zone: MONSTER_ZONE, defense: false },
   ],
   magics: [
-    { code: 10002, zone: MAGIC_ZONE, defense: false },
-    { code: 10003, zone: MAGIC_ZONE, defense: false },
-    { code: 10004, zone: MAGIC_ZONE, defense: false },
+    { id: 2, zone: MAGIC_ZONE, defense: false },
+    { id: 3, zone: MAGIC_ZONE, defense: false },
+    { id: 4, zone: MAGIC_ZONE, defense: false },
   ],
   move(reverse?: boolean) {
     if (reverse) {
