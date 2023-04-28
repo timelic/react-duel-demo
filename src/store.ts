@@ -1,7 +1,12 @@
 import { proxy } from "valtio";
+import { devtools } from "valtio/utils";
+
+const MONSTER_ZONE = 3;
+const MAGIC_ZONE = 4;
 
 interface CardState {
   code: number;
+  zone: number;
   defense: boolean;
 }
 
@@ -13,25 +18,29 @@ interface MatState {
 
 export const store = proxy<MatState>({
   monsters: [
-    { code: 10000, defense: false },
-    { code: 10000, defense: false },
+    { code: 10000, zone: MONSTER_ZONE, defense: false },
+    { code: 10000, zone: MONSTER_ZONE, defense: false },
   ],
   magics: [
-    { code: 10000, defense: false },
-    { code: 10000, defense: false },
-    { code: 10000, defense: false },
+    { code: 10000, zone: MAGIC_ZONE, defense: false },
+    { code: 10000, zone: MAGIC_ZONE, defense: false },
+    { code: 10000, zone: MAGIC_ZONE, defense: false },
   ],
   move(reverse?: boolean) {
     if (reverse) {
       const moved = store.magics.pop();
       if (moved) {
+        moved.zone = MONSTER_ZONE;
         store.monsters.push(moved);
       }
     } else {
       const moved = store.monsters.pop();
       if (moved) {
+        moved.zone = MAGIC_ZONE;
         store.magics.push(moved);
       }
     }
   },
 });
+
+devtools(store, { name: "valtio store", enabled: true });

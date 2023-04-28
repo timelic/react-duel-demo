@@ -100,11 +100,11 @@ export const Board: React.FC = () => {
 
   const cards = snap.magics
     .map((card, sequence) => {
-      return { inner: card, sequence, zone: 4 };
+      return { inner: card, sequence };
     })
     .concat(
       snap.monsters.map((card, sequence) => {
-        return { inner: card, sequence, zone: 3 };
+        return { inner: card, sequence };
       })
     );
 
@@ -120,7 +120,7 @@ export const Board: React.FC = () => {
           {cards.map((card, idx) => (
             <Card
               key={idx}
-              r={card.zone}
+              r={card.inner.zone}
               c={card.sequence}
               defense={card.inner.defense}
             />
