@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "fmt": "npx eslint --fix --ext .ts --ext .tsx src"
   },
   "dependencies": {
     "@react-spring/web": "^9.7.2",
