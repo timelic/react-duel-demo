@@ -100,28 +100,18 @@ export const Board: React.FC = () => {
 
   const cards = snap.magics
     .map((card, sequence) => {
-      return { inner: card, sequence };
+      return { inner: card, sequence, zone: 4 };
     })
     .concat(
       snap.monsters.map((card, sequence) => {
-        return { inner: card, sequence };
+        return { inner: card, sequence, zone: 3 };
       })
     );
 
   return (
     <>
       <div id="controller">
-        <button
-          onClick={() => {
-            const moved = store.monsters.pop();
-            if (moved) {
-              moved.transform.zone = 4;
-              store.magics.push(moved);
-            }
-          }}
-        >
-          A1
-        </button>
+        <button onClick={store.move}>A1</button>
         <button onClick={() => {}}>A2</button>
       </div>
       <div id="camera">
@@ -130,7 +120,7 @@ export const Board: React.FC = () => {
           {cards.map((card, idx) => (
             <Card
               key={idx}
-              r={card.inner.transform.zone}
+              r={card.zone}
               c={card.sequence}
               defense={card.inner.defense}
             />
